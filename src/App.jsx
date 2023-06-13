@@ -1,30 +1,13 @@
 import { useState } from 'react'
+import { TURNS } from './models/Players'
+import { PATRONS } from './models/Patrons'
 import './App.css'
-
-const TURNS = {
-  X: "x",
-  O: "o"
-}
-
-const PATRONS = [
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,4,8],
-  [2,4,6]
-]
 
 function App() {
   const [table, setTable] = useState(Array(9).fill(null))  
   const [turn, setTurn] = useState(TURNS.X)
-  const [winner, setWinner] = useState(null)
-  const [isEmpate, setIsEmpate] = useState(false)
-  const Square = ()=> {
-
-  }
+  const [winner, setWinner] = useState(false)
+  const [isEmpate, setIsEmpate] = useState(false)  
 
   const checkEmpate = (tableToCheck)=>{
     if(tableToCheck.every(element=> element !== null)) setIsEmpate(true)
@@ -37,13 +20,14 @@ function App() {
     const newTable = [...table]
     newTable[index] = turn
     setTable(newTable) 
-    isWinner(newTable)    
+    isWinner(newTable)                
   }  
 
   const resetGame = ()=> {
     setTable(Array(9).fill(null))
     setTurn(TURNS.X)
-    setWinner(null)
+    setWinner(false)    
+    setIsEmpate(false)
   }  
 
   const isWinner = (boardToCheck)=> {    
@@ -53,10 +37,8 @@ function App() {
       if(boardToCheck[a] && boardToCheck[a] === boardToCheck[b] && boardToCheck[a] === boardToCheck[c]) {
         setWinner(boardToCheck[a])
         return
-      }
-      else {
-        setIsEmpate(boardToCheck)
-      }
+      }     
+      checkEmpate(boardToCheck)
     }
 
     return null
